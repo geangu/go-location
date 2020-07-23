@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"log"
+	"fmt"
 
 	"github.com/go-redis/redis"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -27,13 +27,13 @@ func (r *RedisHelper) getClient() (context.Context, *redis.Client) {
 func (r *RedisHelper) SaveLocationRedis(l *Location) {
 	content, err := json.Marshal(l)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	ctx, client := r.getClient()
 	err = client.Set(ctx, l.Key, string(content), 0).Err()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
@@ -43,13 +43,13 @@ func (r *RedisHelper) GetLocation(provider string) Location {
 	ctx, client := r.getClient()
 	val, err := client.Get(ctx, provider).Result()
 	if err != nil {
-		log.Fatal(err.Error())
+		fmt.Println(err.Error())
 		return l
 	}
 
 	err = json.Unmarshal([]byte(val), &l)
 	if err != nil {
-		log.Fatal(err.Error())
+		fmt.Println(err.Error())
 	}
 
 	return l
@@ -64,12 +64,12 @@ func (m *MongoHelper) InsertLocation(location Location) {
 	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	err = client.Ping(context.TODO(), nil)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	collection := client.Database("location_db").Collection("locations")
@@ -78,6 +78,6 @@ func (m *MongoHelper) InsertLocation(location Location) {
 	err = client.Disconnect(context.TODO())
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
