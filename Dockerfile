@@ -2,7 +2,7 @@ FROM golang
 
 WORKDIR /app
 
-COPY . .
+COPY ./app .
 
 RUN go get github.com/gin-gonic/gin
 RUN go get github.com/go-redis/redis
