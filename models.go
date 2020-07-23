@@ -6,15 +6,15 @@ import (
 
 // Location struct to manage location
 type Location struct {
-	Provider  string    `json:"provider"`
+	Key       string    `json:"key"`
 	Latitude  string    `json:"latitude"`
 	Longitude string    `json:"longitude"`
 	Date      time.Time `json:"date"`
 }
 
 // Create Location Object
-func (l *Location) Create(provider string, latitude string, longitude string) {
-	l.Provider = provider
+func (l *Location) Create(key string, latitude string, longitude string) {
+	l.Key = key
 	l.Latitude = latitude
 	l.Longitude = longitude
 	l.Date = time.Now()
@@ -24,9 +24,9 @@ func (l *Location) Create(provider string, latitude string, longitude string) {
 }
 
 // GetRedisCache get last location registered in Redis
-func (l *Location) GetRedisCache(provider string) string {
+func (l *Location) GetRedisCache(key string) Location {
 	redis := new(RedisHelper)
-	return redis.GetProviderLocation(provider)
+	return redis.GetLocation(key)
 }
 
 func (l *Location) saveLocationDB() {

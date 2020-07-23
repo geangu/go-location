@@ -5,12 +5,11 @@ import (
 )
 
 func main() {
-
 	app := gin.Default()
 	routes := app.Group("/location")
 	{
-		routes.GET("/provider/:id", GetProviderLocation)
-		routes.POST("/provider/:id", SaveProviderLocation)
+		routes.GET("/:id", GetLocation)
+		routes.POST("/:id", SaveLocation)
 	}
 	app.Run()
 }

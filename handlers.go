@@ -6,16 +6,35 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetProviderLocation get last provider location from Redis
-func GetProviderLocation(c *gin.Context) {
+type saveLocationRequest struct {
+	Longitude string `json:"longitude" binding:"required"`
+	Latitude  string `json:"latitude" binding:"required"`
+}
+
+// GetLocation get last location from Redis
+func GetLocation(c *gin.Context) {
+	id := c.Param("id")
 	location := new(Location)
-	result := location.GetRedisCache("1")
+	result := location.GetRedisCache(id)
+	if result.Key == "" {
+		status := http.StatusNotFound
+		c.JSON(status, http.StatusText(status))
+		return
+	}
 	c.JSON(http.StatusOK, result)
 }
 
-// SaveProviderLocation save the last location for the provider and Update Redis item
-func SaveProviderLocation(c *gin.Context) {
+// SaveLocation save the last location and Update Redis item
+func SaveLocation(c *gin.Context) {
+	id := c.Param("id")
+	var data saveLocationRequest
+	c.BindJSON(&data)
+
 	location := new(Location)
-	location.Create("1", "54.01", "32.04")
+	location.Create(
+		id,
+		data.Latitude,
+		data.Longitude,
+	)
 	c.JSON(http.StatusOK, location)
 }
