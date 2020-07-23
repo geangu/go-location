@@ -16,7 +16,7 @@ type RedisHelper struct{}
 func (r *RedisHelper) getClient() (context.Context, *redis.Client) {
 	ctx := context.Background()
 	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     "redis:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
@@ -61,7 +61,7 @@ type MongoHelper struct{}
 // InsertLocation item to collection Item
 func (m *MongoHelper) InsertLocation(location Location) {
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
