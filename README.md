@@ -9,7 +9,7 @@ To run this API you need Docker and Docker Compose installed in your computer
 
 
 ```
-docker-composer up --build
+docker-compose up --build
 ```
 
 ## Test end points
