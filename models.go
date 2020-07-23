@@ -30,7 +30,14 @@ func (l *Location) GetRedisCache(key string) Location {
 }
 
 func (l *Location) saveLocationDB() {
-	// TODO: implement me!!!
+	var location Location
+	location.Key = l.Key
+	location.Latitude = l.Latitude
+	location.Longitude = l.Longitude
+	location.Date = l.Date
+
+	mongo := new(MongoHelper)
+	mongo.InsertLocation(location)
 }
 
 func (l *Location) saveRedisCache() {
